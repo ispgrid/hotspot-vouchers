@@ -1,0 +1,29 @@
+{
+    "name": "ispgrid/hotspot-vouchers",
+    "description": "Hotspot vouchers for ISPGrid: batches of prepaid login cards to print, hand to shops and sell over the counter.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Karan",
+            "email": "k@ispgrid.com"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ispgrid\\HotspotVouchers\\": "src/"
+        }
+    },
+    "extra": {
+        "ispgrid": {
+            "name": "Hotspot vouchers",
+            "core": ["0.1"],
+            "databases": ["ispgrid_vouchers"],
+            "providers": ["Ispgrid\\HotspotVouchers\\HotspotVouchersServiceProvider"]
+        }
+    },
+    "minimum-stability": "stable"
+}
