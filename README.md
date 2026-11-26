@@ -3,7 +3,8 @@
 Batches of prepaid Hotspot login cards for [ISPGrid](https://github.com/ispgrid/ispgrid): make a batch, print the
 cards, hand the batch to a shop or keep it for counter sale, and see which cards were sold and used.
 
-Needs ISPGrid 0.1.27 or newer. On an older core it only adds its permission boxes.
+Needs ISPGrid 0.1.27 or newer, with Hotspot switched on in App settings (while it is off, FreeRADIUS refuses every
+Hotspot login, cards included). On an older core it only adds its permission boxes.
 
 ## How it works
 
