@@ -105,5 +105,8 @@
     "Show the QR code": "QR कोड दिखाएँ",
     "Needs the Hotspot login address.": "Hotspot लॉगिन पता चाहिए।",
     "The logo must be 1 MB or smaller.": "लोगो 1 MB या उससे छोटा होना चाहिए।",
-    "Enter a colour like #166534, or leave it empty.": "#166534 जैसा रंग डालें, या इसे खाली छोड़ दें।"
+    "Enter a colour like #166534, or leave it empty.": "#166534 जैसा रंग डालें, या इसे खाली छोड़ दें।",
+    "A4, 40 small cards": "A4, 40 छोटे कार्ड",
+    "Thermal roll, 58 mm": "थर्मल रोल, 58 mm",
+    "Thermal roll, 80 mm": "थर्मल रोल, 80 mm"
 }

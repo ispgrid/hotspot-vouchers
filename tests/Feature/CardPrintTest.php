@@ -7,6 +7,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Ispgrid\HotspotVouchers\Support\CardLayouts;
+use Ispgrid\HotspotVouchers\Models\Batch;
 use Ispgrid\HotspotVouchers\Models\Voucher;
 use Spatie\Activitylog\Models\Activity;
 
@@ -39,14 +40,14 @@ function printedLayout(): ?string
 
 it('prints the logo, the band and the footer on the A4 21 sheet', function () {
     cardLogo();
-    AppSetting::put('vouchers.band_colour', '#166534');
+    AppSetting::put('vouchers.band_colour', '#7c2d12');
     AppSetting::put('vouchers.footer_1', 'Help 98765');
     $batch = voucherBatch(2);
 
     $this->get(route('vouchers.batches.print', $batch->id))
         ->assertOk()
         ->assertSee('data:image/png;base64,', false)
-        ->assertSee('#166534', false)
+        ->assertSee('#7c2d12', false)
         ->assertSee('Help 98765');
 
     expect(printedLayout())->toBe('a4-21');
@@ -146,4 +147,34 @@ it('prints only unused cards with any layout', function () {
         ->assertSee('TEST LAYOUT')
         ->assertSee($unused->code)
         ->assertDontSee($used->code);
+});
+
+it('prints every card on each built-in layout', function (string $layout) {
+    AppSetting::put('vouchers.login_url', 'http://hotspot.example/login');
+    $batch = voucherBatch(2, ['login_style' => Batch::PASSWORD]);
+    $vouchers = Voucher::query()->orderBy('id')->get();
+    $password = Account::query()->findOrFail($vouchers[0]->account_id)->password;
+
+    $this->get(route('vouchers.batches.print', [$batch->id, 'layout' => $layout]))
+        ->assertOk()
+        ->assertSee($vouchers[0]->code)
+        ->assertSee($vouchers[1]->code)
+        ->assertSee($password)
+        ->assertSee('<svg', false);
+
+    expect(printedLayout())->toBe($layout);
+})->with(['a4-21', 'a4-40', 'thermal-58', 'thermal-80']);
+
+it('prints no band colour on thermal paper', function (string $layout) {
+    AppSetting::put('vouchers.band_colour', '#7c2d12');
+    $batch = voucherBatch(1);
+
+    $this->get(route('vouchers.batches.print', [$batch->id, 'layout' => $layout]))->assertOk()->assertDontSee('#7c2d12', false);
+})->with(['thermal-58', 'thermal-80']);
+
+it('leaves the logo off the A4 40 sheet', function () {
+    cardLogo();
+    $batch = voucherBatch(1);
+
+    $this->get(route('vouchers.batches.print', [$batch->id, 'layout' => 'a4-40']))->assertOk()->assertDontSee('data:image', false);
 });

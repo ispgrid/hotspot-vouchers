@@ -58,6 +58,9 @@ class HotspotVouchersServiceProvider extends ServiceProvider
         // The built-in layouts join the list the way another add-on's would (README, "Write a card layout").
         $layouts = $this->app->make(CardLayouts::class);
         $layouts->register('a4-21', fn (): string => __('A4, 21 cards'), 'vouchers::layouts.a4-21');
+        $layouts->register('a4-40', fn (): string => __('A4, 40 small cards'), 'vouchers::layouts.a4-40');
+        $layouts->register('thermal-58', fn (): string => __('Thermal roll, 58 mm'), 'vouchers::layouts.thermal-58');
+        $layouts->register('thermal-80', fn (): string => __('Thermal roll, 80 mm'), 'vouchers::layouts.thermal-80');
 
         $this->app->make(Navigation::class)->add(new NavItem(
             group: 'addons',
