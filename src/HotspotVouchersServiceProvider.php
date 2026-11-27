@@ -55,6 +55,10 @@ class HotspotVouchersServiceProvider extends ServiceProvider
 
         $this->app->make(AddonSettings::class)->register('ispgrid/hotspot-vouchers', 'vouchers::settings', 'generate-vouchers');
 
+        // The built-in layouts join the list the way another add-on's would (README, "Write a card layout").
+        $layouts = $this->app->make(CardLayouts::class);
+        $layouts->register('a4-21', fn (): string => __('A4, 21 cards'), 'vouchers::layouts.a4-21');
+
         $this->app->make(Navigation::class)->add(new NavItem(
             group: 'addons',
             label: fn (): string => __('Vouchers'),
