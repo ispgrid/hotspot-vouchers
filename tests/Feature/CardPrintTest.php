@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\View;
 use Ispgrid\HotspotVouchers\Support\CardLayouts;
 use Ispgrid\HotspotVouchers\Models\Batch;
 use Ispgrid\HotspotVouchers\Models\Voucher;
+use Livewire\Livewire;
 use Spatie\Activitylog\Models\Activity;
 
 beforeEach(function () {
@@ -177,4 +178,28 @@ it('leaves the logo off the A4 40 sheet', function () {
     $batch = voucherBatch(1);
 
     $this->get(route('vouchers.batches.print', [$batch->id, 'layout' => 'a4-40']))->assertOk()->assertDontSee('data:image', false);
+});
+
+it('lists every layout under Print cards, the default first', function () {
+    AppSetting::put('vouchers.layout', 'thermal-58');
+    $batch = voucherBatch(1);
+
+    Livewire::test('vouchers::batch', ['batch' => $batch->id])
+        ->assertSeeInOrder([__('Thermal roll, 58 mm'), __('A4, 21 cards'), __('A4, 40 small cards'), __('Thermal roll, 80 mm')])
+        ->assertSee(route('vouchers.batches.print', [$batch->id, 'layout' => 'thermal-58']), false)
+        ->assertSee(route('vouchers.batches.print', [$batch->id, 'layout' => 'a4-40']), false);
+});
+
+it('lists a layout another add-on registered', function () {
+    testLayout();
+    $batch = voucherBatch(1);
+
+    Livewire::test('vouchers::batch', ['batch' => $batch->id])->assertSee('Test stickers');
+});
+
+it('shows no print list to staff without Print and export vouchers', function () {
+    $batch = voucherBatch(1);
+    $this->actingAs(staffWithVoucherBoxes('generate-vouchers'));
+
+    Livewire::test('vouchers::batch', ['batch' => $batch->id])->assertOk()->assertDontSee(__('A4, 21 cards'));
 });

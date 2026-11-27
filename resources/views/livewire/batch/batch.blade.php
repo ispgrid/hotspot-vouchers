@@ -18,7 +18,14 @@
         </div>
         <div class="flex flex-wrap gap-2">
             @can('print-vouchers')
-                <x-ui.button variant="secondary" href="{{ route('vouchers.batches.print', $this->batch->id) }}" target="_blank" rel="noopener">{{ __('Print cards') }}</x-ui.button>
+                <x-ui.dropdown>
+                    <x-slot:trigger>
+                        <x-ui.button variant="secondary">{{ __('Print cards') }}</x-ui.button>
+                    </x-slot:trigger>
+                    @foreach ($this->printLayouts as $key => $label)
+                        <x-ui.dropdown-item :href="route('vouchers.batches.print', [$this->batch->id, 'layout' => $key])" target="_blank" rel="noopener">{{ $label }}</x-ui.dropdown-item>
+                    @endforeach
+                </x-ui.dropdown>
                 <x-ui.button variant="secondary" href="{{ route('vouchers.batches.csv', $this->batch->id) }}">{{ __('Export CSV') }}</x-ui.button>
             @endcan
             @can('generate-vouchers')

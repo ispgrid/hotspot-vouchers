@@ -12,7 +12,9 @@ use Ispgrid\HotspotVouchers\Models\Shop;
 use Ispgrid\HotspotVouchers\Models\Voucher;
 use Ispgrid\HotspotVouchers\Support\Amount;
 use Ispgrid\HotspotVouchers\Support\CannotChangeBatch;
+use Ispgrid\HotspotVouchers\Support\CardLayouts;
 use Ispgrid\HotspotVouchers\Support\Cards;
+use Ispgrid\HotspotVouchers\Support\CardSettings;
 use Ispgrid\HotspotVouchers\Support\CardStatus;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
@@ -57,6 +59,20 @@ new #[Title('Voucher batch')] class extends Component
     public function batch(): Batch
     {
         return Batch::query()->with('shop')->findOrFail($this->batchId);
+    }
+
+    /**
+     * The layouts under Print cards, the default one first.
+     *
+     * @return array<string, string>
+     */
+    #[Computed]
+    public function printLayouts(): array
+    {
+        $labels = app(CardLayouts::class)->labels();
+        $default = app(CardLayouts::class)->resolve(CardSettings::current()->layout);
+
+        return [$default => $labels[$default] ?? $default] + $labels;
     }
 
     /**
