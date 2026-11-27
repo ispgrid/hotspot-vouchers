@@ -13,11 +13,12 @@
         .bar button { padding: 6px 14px; border: 0; border-radius: 6px; background: #166534; color: #fff; font-size: 14px; cursor: pointer; }
         .sheet { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5mm; padding: 1.5mm; }
         .card { height: 26mm; border: 1px dashed #a1a1aa; border-radius: 1.5mm; padding: 1.8mm; display: flex; gap: 1.5mm; break-inside: avoid; overflow: hidden; }
-        .text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.3mm; font-size: 6.5pt; }
-        .title { font-weight: 700; font-size: 7.5pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .muted { color: #52525b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .code { font-family: ui-monospace, monospace; font-size: 9.5pt; font-weight: 700; }
-        .label { font-size: 5.5pt; text-transform: uppercase; color: #71717a; }
+        .text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.2mm; font-size: 6.5pt; }
+        .title { font-weight: 700; font-size: 7.5pt; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .muted { color: #52525b; font-size: 6pt; line-height: 1.1; }
+        .text > * { flex-shrink: 0; }
+        .code { font-family: ui-monospace, monospace; font-size: 9pt; font-weight: 700; line-height: 1.15; }
+        .label { font-size: 5.5pt; line-height: 1.1; text-transform: uppercase; color: #71717a; }
         .qr { width: 16mm; flex: none; align-self: center; }
         .qr svg { width: 16mm; height: 16mm; display: block; }
         @if ($sheet->band !== null)
