@@ -119,6 +119,15 @@ it('marks counter-sale cards sold one by one', function () {
     expect($voucher->fresh()->sold_at)->toBeNull();
 });
 
+it('counts a used counter-sale card as sold, in the takings and in the batch list', function () {
+    $batch = voucherBatch(2);
+    app(HandOutBatch::class)->handle($batch->id, null, null, null);
+    batchAccounts($batch)->first()->forceFill(['hotspot_first_login_at' => now(), 'expiry' => now()->addHours(3), 'hotspot_pending_validity' => null])->saveQuietly();
+
+    expect(batchPage($batch)->instance()->takings)->toBe('20.00')
+        ->and(Livewire::test('vouchers::batches')->instance()->cardCounts)->toBe(['sold' => [$batch->id => 1], 'used' => [$batch->id => 1]]);
+});
+
 it('shows a used card as used', function () {
     $batch = voucherBatch(1);
     app(HandOutBatch::class)->handle($batch->id, null, null, null);

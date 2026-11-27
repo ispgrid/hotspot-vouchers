@@ -89,22 +89,25 @@ new #[Title('Vouchers')] class extends Component
     #[Computed]
     public function batches(): LengthAwarePaginator
     {
-        return Batch::query()->with('shop')->withCount('vouchers')->withCount(['vouchers as sold_count' => fn ($query) => $query->whereNotNull('sold_at')])
-            ->latest('id')->paginate(25);
+        return Batch::query()->with('shop')->withCount('vouchers')->latest('id')->paginate(25);
     }
 
     /**
-     * Used cards per batch on this page (their customer logged in once).
+     * Sold and used cards per batch on this page. Used: its customer logged in once. Sold: marked sold (every card
+     * of a batch handed to a shop is), or used, as on the batch page.
      *
-     * @return array<int, int>
+     * @return array{sold: array<int, int>, used: array<int, int>}
      */
     #[Computed]
-    public function usedCounts(): array
+    public function cardCounts(): array
     {
-        $vouchers = Voucher::query()->whereIn('batch_id', collect($this->batches->items())->pluck('id'))->get(['batch_id', 'account_id']);
+        $vouchers = Voucher::query()->whereIn('batch_id', collect($this->batches->items())->pluck('id'))->get(['batch_id', 'account_id', 'sold_at']);
         $used = Account::withTrashed()->whereIn('id', $vouchers->pluck('account_id'))->whereNotNull('hotspot_first_login_at')->pluck('id')->flip();
 
-        return $vouchers->filter(fn (Voucher $voucher): bool => $used->has($voucher->account_id))->countBy('batch_id')->all();
+        return [
+            'sold' => $vouchers->filter(fn (Voucher $voucher): bool => $voucher->sold_at !== null || $used->has($voucher->account_id))->countBy('batch_id')->all(),
+            'used' => $vouchers->filter(fn (Voucher $voucher): bool => $used->has($voucher->account_id))->countBy('batch_id')->all(),
+        ];
     }
 
     /**
