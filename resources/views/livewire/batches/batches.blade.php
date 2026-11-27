@@ -50,8 +50,8 @@
                 <x-ui.td>{{ $batch->plan_name }}</x-ui.td>
                 <x-ui.td class="tabular-nums">{{ $this->money((string) $batch->card_price) }}</x-ui.td>
                 <x-ui.td class="tabular-nums">{{ $batch->vouchers_count }}</x-ui.td>
-                <x-ui.td class="tabular-nums">{{ $batch->sold_count }}</x-ui.td>
-                <x-ui.td class="tabular-nums">{{ $this->usedCounts[$batch->id] ?? 0 }}</x-ui.td>
+                <x-ui.td class="tabular-nums">{{ $this->cardCounts['sold'][$batch->id] ?? 0 }}</x-ui.td>
+                <x-ui.td class="tabular-nums">{{ $this->cardCounts['used'][$batch->id] ?? 0 }}</x-ui.td>
                 <x-ui.td>{{ $batch->soldThrough() }}</x-ui.td>
                 <x-ui.td><x-ui.badge :color="$batch->stateColor()">{{ $batch->stateLabel() }}</x-ui.badge></x-ui.td>
             </tr>

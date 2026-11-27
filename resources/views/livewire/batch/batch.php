@@ -115,13 +115,14 @@ new #[Title('Voucher batch')] class extends Component
     }
 
     /**
-     * What the batch brought in: the shop's charge, or the card price of each card sold over the counter.
+     * What the batch brought in: the shop's charge, or the card price of each card sold over the counter (marked sold,
+     * or used: a card that logged in was sold, also when staff forgot to mark it).
      */
     #[Computed]
     public function takings(): string
     {
         $batch = $this->batch;
-        $sold = count(array_filter($this->allCards, fn (array $card): bool => $card['sold_at'] !== null));
+        $sold = count(array_filter($this->allCards, fn (array $card): bool => $card['sold_at'] !== null || $card['first_login'] !== null));
 
         return $batch->shop_id !== null
             ? Amount::format(bcmul((string) $batch->shop_price, (string) count($this->allCards), 3))
