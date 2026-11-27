@@ -37,14 +37,16 @@ System, then Add-ons, then Hotspot vouchers:
 - **Hotspot login address**, for example `http://hotspot.example/login`. The QR code opens it with `username` and
   `password` in the address. The MikroTik Hotspot server profile must allow HTTP PAP login for that to work.
 - **Logo on the cards:** PNG or JPG, 1 MB at most (checked by its content; SVG is refused). A new logo replaces the
-  old one; Remove logo deletes it. The A4 40 layout has no room for it.
+  old one; Remove logo deletes it.
 - **Footer:** two lines of up to 40 characters, such as a helpline or "Ask the shop for help".
 - **Band colour:** a colour like `#166534` for the top of each card, with black or white text, whichever reads
   better. Empty: no band. Thermal paper prints no band.
 - **Show the price, the validity, the plan name, the QR code:** all on until switched off.
 - **Default layout:** the one listed first under Print cards.
 
-The settings apply to every batch. A panel that changes none of them prints the same card as before.
+The settings apply to every batch. A panel that changes none of them prints the same card as before. The A4 40
+cards are small: they print the name, the price and validity, the codes and the QR code, but no logo, plan name or
+footer.
 
 **Thermal printers:** set the printer's paper size to the roll (58 mm or 80 mm) in its driver, and in the browser's
 print dialog turn off headers and footers and set the margins to none. Thermal printers print the logo in black and
