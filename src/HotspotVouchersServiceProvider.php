@@ -10,6 +10,7 @@ use App\Support\Navigation\Navigation;
 use App\Support\Navigation\NavItem;
 use App\Support\Permissions;
 use Illuminate\Support\ServiceProvider;
+use Ispgrid\HotspotVouchers\Support\CardLayouts;
 use Livewire\Livewire;
 
 /**
@@ -29,6 +30,8 @@ class HotspotVouchersServiceProvider extends ServiceProvider
         $default = $this->app->environment('testing') ? 'ispgrid_vouchers_test' : 'ispgrid_vouchers';
 
         config(['database.connections.vouchers' => array_merge($base, ['database' => $default], $own)]);
+
+        $this->app->singleton(CardLayouts::class);
     }
 
     public function boot(): void
@@ -51,6 +54,13 @@ class HotspotVouchersServiceProvider extends ServiceProvider
         Livewire::addNamespace('vouchers', viewPath: __DIR__.'/../resources/views/livewire');
 
         $this->app->make(AddonSettings::class)->register('ispgrid/hotspot-vouchers', 'vouchers::settings', 'generate-vouchers');
+
+        // The built-in layouts join the list the way another add-on's would (README, "Write a card layout").
+        $layouts = $this->app->make(CardLayouts::class);
+        $layouts->register('a4-21', fn (): string => __('A4, 21 cards'), 'vouchers::layouts.a4-21');
+        $layouts->register('a4-40', fn (): string => __('A4, 40 small cards'), 'vouchers::layouts.a4-40');
+        $layouts->register('thermal-58', fn (): string => __('Thermal roll, 58 mm'), 'vouchers::layouts.thermal-58');
+        $layouts->register('thermal-80', fn (): string => __('Thermal roll, 80 mm'), 'vouchers::layouts.thermal-80');
 
         $this->app->make(Navigation::class)->add(new NavItem(
             group: 'addons',
