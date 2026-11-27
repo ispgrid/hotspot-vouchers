@@ -10,6 +10,7 @@ use App\Support\Navigation\Navigation;
 use App\Support\Navigation\NavItem;
 use App\Support\Permissions;
 use Illuminate\Support\ServiceProvider;
+use Ispgrid\HotspotVouchers\Support\CardLayouts;
 use Livewire\Livewire;
 
 /**
@@ -29,6 +30,8 @@ class HotspotVouchersServiceProvider extends ServiceProvider
         $default = $this->app->environment('testing') ? 'ispgrid_vouchers_test' : 'ispgrid_vouchers';
 
         config(['database.connections.vouchers' => array_merge($base, ['database' => $default], $own)]);
+
+        $this->app->singleton(CardLayouts::class);
     }
 
     public function boot(): void
